@@ -11,7 +11,6 @@ function Cart() {
   const fetchItems = async () => {
     try {
       const items = await getAllItems();
-      console.log('Fetched items:', items);
       setCartItems(items || []);
     } catch (error) {
       console.error('Error fetching items:', error);
