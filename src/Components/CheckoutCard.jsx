@@ -33,7 +33,7 @@ const inputs = [
   ],
 ];
 
-function CheckoutCard({items}) {
+function CheckoutCard({ items }) {
   const [summary, setSummary] = useState({
     subtotal: 0,
     shipping: 0,

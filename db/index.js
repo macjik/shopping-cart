@@ -26,19 +26,19 @@ export const addItem = async (item) => {
   return tx.complete;
 };
 
-export const setSetting = async (key, value) => {
+export const setSetting = async (name, value) => {
   const db = await openDB();
   const tx = db.transaction('settings', 'readwrite');
-  tx.objectStore('settings').put({ key, value });
+  tx.objectStore('settings').put({ name, value });
   return tx.complete;
 };
 
-export const getSetting = async (key) => {
+export const getSetting = async (name) => {
   const db = await openDB();
   return new Promise((resolve, reject) => {
     const tx = db.transaction('settings', 'readonly');
     const store = tx.objectStore('settings');
-    const request = store.get(key);
+    const request = store.get(name);
 
     request.onsuccess = () => resolve(request.result?.value ?? null);
     request.onerror = () => reject(request.error);
@@ -88,17 +88,17 @@ export const seedItems = async () => {
     await new Promise((resolve) => (tx.oncomplete = resolve));
   }
 
-  // const settingsTx = db.transaction('settings', 'readwrite');
-  // const settingsStore = settingsTx.objectStore('settings');
+  const settingsTx = db.transaction('settings', 'readwrite');
+  const settingsStore = settingsTx.objectStore('settings');
 
-  // await Promise.all([
-  //   new Promise((resolve) => {
-  //     settingsStore.put({ name: 'shipping', value: 30 }).onsuccess = resolve;
-  //   }),
-  //   new Promise((resolve) => {
-  //     settingsStore.put({ name: 'taxRate', value: 0.08 }).onsuccess = resolve;
-  //   }),
-  // ]);
+  await Promise.all([
+    new Promise((resolve) => {
+      settingsStore.put({ name: 'shipping', value: 30 }).onsuccess = resolve;
+    }),
+    new Promise((resolve) => {
+      settingsStore.put({ name: 'taxRate', value: 0.08 }).onsuccess = resolve;
+    }),
+  ]);
 };
 
 export const getAllItems = async () => {
